@@ -1,0 +1,1206 @@
+MAP
+  IMAGETYPE	AGGA
+  #EXTENT 410348.773  261032.078 1838408.773 1966502.078
+  EXTENT 355181 268335 1.83347e+06 2.06336e+06
+  SIZE		700 500
+  IMAGECOLOR	255 255 255
+  FONTSET '/var/www/html/ncgap/myfonts.txt'
+  #FONTSET '/var/www/html/ncgap/fontset.txt'
+  CONFIG PROJ_LIB "/usr/local/share/proj/"
+  
+  #WEB
+  #	IMAGEPATH   '/data/server_temp/'
+  #	IMAGEURL  '/server_temp/'
+  #	LOG /var/www/html/temp/error.log
+  #END
+  
+  OUTPUTFORMAT
+    NAME 'AGGA'
+    DRIVER AGG/PNG
+    IMAGEMODE RGB
+    FORMATOPTION "INTERLACE=OFF"    
+  END
+  
+  OUTPUTFORMAT
+    NAME mypng
+    DRIVER "GD/PNG"
+    MIMETYPE "image/png"
+    IMAGEMODE rgba
+    EXTENSION "png"
+    TRANSPARENT ON
+  END
+  
+  OUTPUTFORMAT
+    NAME pdfpng
+    DRIVER "GD/PNG"
+    MIMETYPE "image/png"
+    IMAGEMODE rgb
+    EXTENSION "png"
+    FORMATOPTION "INTERLACE=OFF"
+  END
+  
+  LEGEND
+    STATUS ON
+    KEYSIZE 40 20
+    KEYSPACING 5 5
+    LABEL
+      TYPE truetype
+      FONT 'Sans'
+      SIZE medium
+    END
+  END
+  
+  SCALEBAR
+    IMAGECOLOR 255 255 255
+    LABEL
+      TYPE truetype
+      FONT  "Sans"
+      SIZE  8
+      OUTLINECOLOR  255 255 255
+      COLOR 0 0 0
+    END
+    STYLE 1
+    SIZE 100 2
+    COLOR 0 0 0
+    UNITS kilometers
+    INTERVALS 1
+    TRANSPARENT FALSE
+    STATUS EMBED
+  END
+   
+  REFERENCE
+    IMAGE   '/var/www/html/data/segap/se_ref.png'
+    SIZE  142 165
+    EXTENT 410348.773  261032.078 1838408.773 1966502.078
+    STATUS ON 
+    COLOR -1 -1 -1
+  END
+  SYMBOL
+    NAME 'hatch-lines'
+    TYPE HATCH
+  END 
+      
+  SYMBOL
+    NAME 'hatch-pattern'
+    TYPE  vector
+    POINTS
+      5 5
+      6 5
+      6 6
+      5 6
+      5 5
+      -1 -1 
+      15 15
+      16 15
+      16 16
+      15 16
+      15 15
+    END
+  END
+  #################################################################################################################
+  ### layer definitions
+  #### background raster 
+  LAYER
+    NAME    landcover
+    DATA    "/var/www/html/data/segap/se_lcover.gtiff"
+   #DATA    "/data/website_data/se_lcover.gtiff"
+    STATUS   on
+    TYPE     raster
+    TEMPLATE "dummy.html"
+  END
+  
+  LAYER
+    NAME    elevation
+    DATA    "/var/www/html/data/segap/SE_Hillshade_rgb.gtiff"
+   # DATA    "/data/website_data/SE_Hillshade_rgb.gtiff"
+    STATUS   off
+    TYPE     raster
+  END
+  
+    ########################################################################################################
+  ######species range maps
+  #####################################################################################################
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "rangemaps"
+    CONNECTION "user=postgres  dbname=segap_ranges host=localhost"
+    DATA "wkb_geometry from r_mnyba"
+    STATUS off
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASSITEM "present"
+    CLASS   
+      NAME "Summer" 
+      EXPRESSION "1"             
+      STYLE
+        OUTLINECOLOR 0 0 0
+        WIDTH 1
+      END
+      STYLE
+        COLOR  255 251 195
+      END
+    END
+    CLASS   
+      NAME "Winter" 
+      EXPRESSION "2"             
+      STYLE
+        OUTLINECOLOR 0 0 0
+        WIDTH 1
+      END
+      STYLE
+        COLOR  194 252 254
+      END
+    END
+    CLASS   
+      NAME "Year-round" 
+      EXPRESSION "3"             
+      STYLE
+        OUTLINECOLOR 0 0 0
+        WIDTH 1
+      END
+      STYLE
+        COLOR  195 255 195
+      END
+    END   
+  END
+  
+  ###############################################################################################
+  ########calculated raster layer
+  LAYER
+    NAME    mapcalc
+    DATA    ""
+    STATUS   off
+    TYPE     raster
+  END
+  
+
+  
+   #############################################################################################################
+  ##foreground vector layers
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "urban"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from se_cities"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE
+        COLOR 255 128 0
+        OUTLINECOLOR 0 0 0
+        WIDTH 1
+      END
+    END
+    TEMPLATE "dummy.html"
+  END
+  
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "roads"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_roads"
+    STATUS off
+    TYPE LINE
+    LABELITEM 'name'
+    CLASS 
+      LABEL
+        TYPE truetype
+        FONT  "Sans"
+        SIZE  8
+        OUTLINECOLOR  255 255 255
+        COLOR 0 0 0
+        MINDISTANCE  100
+        POSITION  lr
+        MINFEATURESIZE auto
+        WRAP ' '
+      END
+      STYLE
+        WIDTH 1
+        COLOR 255 0 0 
+      END
+    END
+  END 
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "rivers"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_rivers"
+    STATUS off
+    TYPE LINE
+    LABELITEM 'nameen'
+    CLASS 
+      LABEL
+        TYPE truetype
+        FONT  "Sans"
+        SIZE  8
+        OUTLINECOLOR  255 255 255
+        COLOR 0 0 0
+        MINDISTANCE  100
+        POSITION  lr
+        MINFEATURESIZE auto
+        WRAP ' '
+      END
+      STYLE
+        WIDTH 1
+        COLOR 190 232 255
+      END
+    END
+  END 
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "watersheds"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from se_wtshds_cmpl"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE
+        OUTLINECOLOR 50 100 150 
+        WIDTH 1
+      END
+    END
+    TEMPLATE "dummy.html"
+  END 
+  
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "counties"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from se_county"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 120 120 120
+      END
+    END
+    TEMPLATE "dummy.html"
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "states"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from se_states"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 0 0 0
+      END
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "bcr"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from se_bcr"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 125 38 205
+      END
+    END
+    TEMPLATE "dummy.html"
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "lcc"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "the_geom from se_lcc1"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 0 255 0
+      END
+    END
+    TEMPLATE "dummy.html"
+  END
+   ###########################################################################################################
+  ###manage layers  query  
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "manage_q"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from se_steward"
+    STATUS off
+    TYPE POLYGON
+    CLASS
+      STYLE        
+        SYMBOL 'hatch-lines'
+	  	COLOR 120 120 120       
+        SIZE 10
+        OUTLINECOLOR 120 120 120
+      END
+    END
+    TEMPLATE "dummy.html"
+  END
+   ###################################################################################
+  ### management layer
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "gapman"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_manage"
+    STATUS off
+    TYPE POLYGON
+    CLASSITEM "man_c_recl"
+    TRANSPARENCY alpha
+    CLASS   
+      NAME "USFWS" 
+      EXPRESSION "1"             
+      STYLE
+        OUTLINECOLOR 127 204 167
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   127 204 167
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "USFS" 
+      EXPRESSION "2"             
+      STYLE
+        OUTLINECOLOR 204 235 197
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  204 235 197
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "TVA" 
+      EXPRESSION "3"             
+      STYLE
+        OUTLINECOLOR 228 196 159
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   228 196 159
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "DOD/ACE" 
+      EXPRESSION "4"             
+      STYLE
+        OUTLINECOLOR 251 180 206
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   251 180 206
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "DOE" 
+      EXPRESSION "5"             
+      STYLE
+        OUTLINECOLOR 251 180 206
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   251 180 206
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "NPS" 
+      EXPRESSION "6"             
+      STYLE
+        OUTLINECOLOR 202 189 220
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   202 189 220
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "NOAA" 
+      EXPRESSION "7"             
+      STYLE
+        OUTLINECOLOR 60 93 255
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   60 93 255
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "FED OTHER" 
+      EXPRESSION "8"             
+      STYLE
+        OUTLINECOLOR 228 196 159
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   228 196 159
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "RESERVATION" 
+      EXPRESSION "9"             
+      STYLE
+        OUTLINECOLOR 253 180 108
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   253 180 108
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "STATE PARK/HISTORIC" 
+      EXPRESSION "10"             
+      STYLE
+        OUTLINECOLOR 143 181 190
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   143 181 190
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "STATE WMA/GAMELANDS" 
+      EXPRESSION "11"             
+      STYLE
+        OUTLINECOLOR 255 245 139
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   255 245 139
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "STATE OTHER" 
+      EXPRESSION "12"             
+      STYLE
+        OUTLINECOLOR 179 227 238
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   179 227 238
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "STATE FOREST" 
+      EXPRESSION "13"             
+      STYLE
+        OUTLINECOLOR 143 181 190
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   143 181 190
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "STATE COASTAL RESERVE" 
+      EXPRESSION "14"             
+      STYLE
+        OUTLINECOLOR 60 93 255
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   60 93 255
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "STATE NATURAL AREA/PRESERVE" 
+      EXPRESSION "15"             
+      STYLE
+        OUTLINECOLOR 143 181 190
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   143 181 190
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "PRIVATE CONSERVATION EASEMENT" 
+      EXPRESSION "16"             
+      STYLE
+        OUTLINECOLOR  0 0 0
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR   0 0 0 
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+  END
+  
+   ###################################################################################
+  ### ownership layer
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "gapown"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_owner"
+    STATUS off
+    TYPE POLYGON
+    CLASSITEM "own_c_recl"
+    TRANSPARENCY alpha
+    CLASS   
+      NAME "Tennessee Valley Authority (TVA)" 
+      EXPRESSION "1"             
+      STYLE
+        OUTLINECOLOR 228 196 159
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR 228 196 159  
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Bureau of Land Management (BLM) or Bureau of Reclamation (BOR)" 
+      EXPRESSION "2"             
+      STYLE
+        OUTLINECOLOR 254 230 121
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  254 230 121
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Fish & Wildlife Service (FWS)" 
+      EXPRESSION "3"             
+      STYLE
+        OUTLINECOLOR 127 204 167
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  127 204 167
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Forest Service (USFS)" 
+      EXPRESSION "4"             
+      STYLE
+        OUTLINECOLOR 204 235 197
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  204 235 197
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Department of Defense (DOD) & Department of Energy (DOE)" 
+      EXPRESSION "5"             
+      STYLE
+        OUTLINECOLOR 251 180 206
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  251 180 206
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "National Park Service (NPS)" 
+      EXPRESSION "6"             
+      STYLE
+        OUTLINECOLOR 202 189 220
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  202 189 220
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Natural Resources Conservation Service (NRCS) or  Agricultural Research Service (ARS)" 
+      EXPRESSION "7"             
+      STYLE
+        OUTLINECOLOR 228 196 159
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  228 196 159
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Bureau of Indian Affairs (BIA)" 
+      EXPRESSION "8"             
+      STYLE
+        OUTLINECOLOR 253 180 108
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  253 180 108
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "National Oceanic & Atmospheric Administration (NOAA)" 
+      EXPRESSION "9"             
+      STYLE
+        OUTLINECOLOR 60 93 255
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  60 93 255
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Other Federal Land" 
+      EXPRESSION "10"             
+      STYLE
+        OUTLINECOLOR 228 196 159
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  228 196 159
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Native American Land" 
+      EXPRESSION "11"             
+      STYLE
+        OUTLINECOLOR 253 180 108
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  253 180 108
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Parks & Recreation Area" 
+      EXPRESSION "12"             
+      STYLE
+        OUTLINECOLOR 143 181 190
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  143 181 190
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Land Board & State School Land" 
+      EXPRESSION "13"             
+      STYLE
+        OUTLINECOLOR 179 227 238
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  179 227 238
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Wildlife Reserves" 
+      EXPRESSION "14"             
+      STYLE
+        OUTLINECOLOR 255 245 139
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  255 245 139
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Other State Land" 
+      EXPRESSION "15"             
+      STYLE
+        OUTLINECOLOR 179 227 238
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  179 227 238
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Forest" 
+      EXPRESSION "16"             
+      STYLE
+        OUTLINECOLOR 143 181 190
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  143 181 190
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Coastal Reserve" 
+      EXPRESSION "17"             
+      STYLE
+        OUTLINECOLOR 60 93 255
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  60 93 255
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Natural or Cultural Preserve" 
+      EXPRESSION "18"             
+      STYLE
+        OUTLINECOLOR 143 181 190
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  143 181 190
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "State Department of Agriculture" 
+      EXPRESSION "19"             
+      STYLE
+        OUTLINECOLOR 179 227 238
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  179 227 238
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "City, County or Regional Government Land" 
+      EXPRESSION "20"             
+      STYLE
+        OUTLINECOLOR 179 227 238
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  179 227 238
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS   
+      NAME "Non-Governmental Conservation Organization" 
+      EXPRESSION "21"             
+      STYLE
+        OUTLINECOLOR 0 0 0 
+        WIDTH 1
+      END
+      STYLE
+        SYMBOL 'hatch-lines'
+        COLOR  0 0 0 
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+  END
+ 
+   ###########################################################################################################
+  ## status layer
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "gapsta"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_status"
+    STATUS off
+    TYPE POLYGON
+    CLASSITEM "status_c"
+    TRANSPARENCY alpha
+    CLASS
+      NAME "1-Permanent (encouraged natural processes)" 
+      EXPRESSION "1" 	  	         
+	  	STYLE
+        OUTLINECOLOR 3 38 92
+        WIDTH 1
+      END
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR  3 38 92
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS
+      NAME "2-Permanent (suppressed natural processes)" 
+      EXPRESSION "2" 	  	         
+	  	STYLE
+        OUTLINECOLOR 47 92 149
+        WIDTH 1
+      END
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR     47 92 149
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+    CLASS
+      NAME "3-Permanent (intensive anthropogenic disturbance)" 
+      EXPRESSION "3" 	  	         
+	  	STYLE
+        OUTLINECOLOR 60 131 237
+        WIDTH 1
+      END
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR   60 131 237 
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+    END
+  END
+   ###############################################################################################################
+  #### Vector layers to display red hatch select AOIs
+  
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "counties_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_county"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "basin_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_wtshds"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "state_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_states"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "owner_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_owner"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "status_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_status"
+    STATUS off
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "manage_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_manage"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END  
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "ecosys_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_bnd"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END  
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "bcr_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry FROM se_bcr"
+    STATUS OFF
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "lcc_select"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "the_geom from se_lcc1"
+    STATUS off
+    TYPE POLYGON
+    TRANSPARENCY alpha
+    CLASS	
+      STYLE
+	  	  SYMBOL 'hatch-lines'
+	  	  COLOR 255 0 0      
+        ANGLE 60
+        SIZE 10
+        WIDTH 1
+      END
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0
+      END  	         
+    END
+  END
+  
+  
+  #########################################################################################################
+  ## AOI map      
+  LAYER
+    CONNECTIONTYPE postgis
+    NAME "aoi"
+    CONNECTION "user=postgres  dbname=segap host=localhost"
+    DATA "wkb_geometry from aoi"
+    STATUS OFF
+    TYPE POLYGON
+    CLASS
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 0 0 255
+      END
+    END
+    CLASS
+      STYLE
+        WIDTH 1
+        OUTLINECOLOR 255 0 0 
+      END
+    END
+  END
+END
