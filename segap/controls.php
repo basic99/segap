@@ -3,24 +3,24 @@ require('se_config.php');
 pg_connect($pg_connect);
 
 
-require_once 'Zend/Loader.php';
-Zend_Loader::loadClass('Zend_Cache');
-try{
-   $frontendOptions = array(
-      'lifetime' => 604800, // cache lifetime 
-      'automatic_serialization' => true
-   );
-   $backendOptions = array(
-       'cache_dir' => '../../temp/' // Directory where to put the cache files
-   );
-   // getting a Zend_Cache_Core object
-   $cache = Zend_Cache::factory('Output',
-                                'File',
-                                $frontendOptions,
-                                $backendOptions);
-} catch(Exception $e) {
-  echo $e->getMessage();
-}
+// require_once 'Zend/Loader.php';
+// Zend_Loader::loadClass('Zend_Cache');
+// try{
+//    $frontendOptions = array(
+//       'lifetime' => 604800, // cache lifetime
+//       'automatic_serialization' => true
+//    );
+//    $backendOptions = array(
+//        'cache_dir' => '../../temp/' // Directory where to put the cache files
+//    );
+//    // getting a Zend_Cache_Core object
+//    $cache = Zend_Cache::factory('Output',
+//                                 'File',
+//                                 $frontendOptions,
+//                                 $backendOptions);
+// } catch(Exception $e) {
+//   echo $e->getMessage();
+// }
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -42,7 +42,7 @@ try{
 body {padding: 0px; margin: 2px;}
 #tabs {font-size: 11px; width: 315px;}
 #tabs-1, #tabs-3{overflow: scroll;  width: 270px; font-size: 16px;}
-#tabs-2 {overflow: scroll;  width: 298px; font-size: 16px; } 
+#tabs-2 {overflow: scroll;  width: 298px; font-size: 16px; }
 #tabs-2cont {padding-bottom: 0px;}
 
 #pre_btns {font-size: 11px; padding-bottom: 20px;}
@@ -59,11 +59,11 @@ button {width: 90px;}
 $(function() {
    $( "#tabs" ).tabs();
    $("button").button();
-   
+
    var win_h = $(window).height();
    $("#tabs-1,#tabs-3").height(win_h - 78);
    $("#tabs-2").height(win_h - 104);
-   
+
    $("#aoi_reset").click(function(evt) {
       evt.preventDefault();
       pre_reset();
@@ -92,7 +92,7 @@ $(function() {
       document.getElementById('cust').style.display = 'none';
       //set_tab2();
       pre_start();
-      
+
    });
 });
 /* ]]> */
@@ -139,7 +139,7 @@ $(function() {
 </div>
 <div id="tabs-2cont">
 <div id="cont2">
-       
+
 <div id="pre_btns" >
 <button id="aoi_reset">&nbsp;Reset&nbsp;&nbsp;</button>
 <button id="aoi_submit">Submit</button>
@@ -157,7 +157,7 @@ $(function() {
 <ul class="aqtree3clickable">
 <li><a href="#" class="no_link">state</a>
 <ul>
-<li><input type="checkbox" name="states_tab2"  onclick="show_state();" /> 
+<li><input type="checkbox" name="states_tab2"  onclick="show_state();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 <?php
 $query = "select state_name, ogc_fid from se_states order by state_name";
@@ -170,7 +170,7 @@ while ($row = pg_fetch_array($result)){
 </li>
 <li><a href="#" class="no_link">county</a>
 <ul>
-<li><input type="checkbox" name="county_tab2"  onclick="show_county();" /> 
+<li><input type="checkbox" name="county_tab2"  onclick="show_county();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 
 <li><a href="#" class="no_link">Alabama</a>
@@ -286,7 +286,7 @@ while ($row = pg_fetch_array($result)){
 </li>
 <li><a href="#" class="no_link">watershed</a>
 <ul>
-<li><input type="checkbox" name="wtshds_tab2"  onclick="show_basin();" /> 
+<li><input type="checkbox" name="wtshds_tab2"  onclick="show_basin();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 <?php
 $query = "select cat_name, ogc_fid from se_wtshds  order by cat_name";
@@ -312,7 +312,7 @@ while ($row = pg_fetch_array($result)){
 </li>
 <li><a href="#" class="no_link">lcc</a>
 <ul>
-<li><input type="checkbox" name="lcc_tab2"  onclick="show_lcc();" /> 
+<li><input type="checkbox" name="lcc_tab2"  onclick="show_lcc();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 <?php
 $query = "select gid, lcc_name from se_lcc1  order by lcc_name";
@@ -325,7 +325,7 @@ while ($row = pg_fetch_array($result)){
 </li>
 <li><a href="#" class="no_link">ownership</a>
 <ul>
-<li><input type="checkbox" name="owner_tab2"  onclick="show_owner();" /> 
+<li><input type="checkbox" name="owner_tab2"  onclick="show_owner();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 <li><a href="#" class="no_link">Alabama</a>
 <ul>
@@ -453,7 +453,7 @@ while ($row = pg_fetch_array($result)){
 </li>
 <li><a href="#" class="no_link">management</a>
 <ul>
-<li><input type="checkbox" name="manage_tab2"  onclick="show_manage();" /> 
+<li><input type="checkbox" name="manage_tab2"  onclick="show_manage();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 <li><a href="#" class="no_link">Alabama</a>
 <ul>
@@ -572,7 +572,7 @@ while ($row = pg_fetch_array($result)){
 </li>
 <li><a href="#" class="no_link">status</a>
 <ul>
-<li><input type="checkbox" name="status_tab2"  onclick="show_status();" /> 
+<li><input type="checkbox" name="status_tab2"  onclick="show_status();" />
 <a style="font-style: italic; color: #888;" >Show this layer</a></li>
 <li><a href="#" class="no_link">Alabama</a>
 <ul>
@@ -706,7 +706,7 @@ while ($row = pg_fetch_array($result)){
    <button id="predef">Predefined</button>
 
 
-<p>Click on the map to locate the starting point. Move the cursor to the second point and click again. 
+<p>Click on the map to locate the starting point. Move the cursor to the second point and click again.
 Continue in this fashion until the polygon describes the AOI. To start over click reset, or to submit AOI click submit. </p>
 
 <p>Create an AOI by <a href="javascript:upload();">uploading</a> a user Shapefile.</p>
