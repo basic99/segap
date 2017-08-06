@@ -4,7 +4,10 @@ session_start();
 require('se_config.php');
 pg_connect($pg_connect);
 
-$mapfile = "../segap.map";
+ini_set("display_errors", 0);
+ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
+
+$mapfile = "/var/www/htmlsegap/segap.map";
 
 $user_x = $_POST['user_x'];
 $user_y = $_POST['user_y'];
