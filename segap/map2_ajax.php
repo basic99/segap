@@ -1,5 +1,12 @@
 <?php
 //date_default_timezone_set("America/New_York");
+
+date_default_timezone_set('America/New_York');
+
+// ini_set("display_errors", 0);
+ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
+error_log("map2_ajax");
+
 require('se_aoi_class.php');
 session_start();
 
@@ -7,11 +14,7 @@ require('se_config.php');
 pg_connect($pg_connect);
 require('se_define_aoi.php');
 
-date_default_timezone_set('America/New_York');
 
-// ini_set("display_errors", 0);
-ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
-error_log("map2_ajax");
 
 //click points for navigation
 $click_x = $_POST['clickx'];
