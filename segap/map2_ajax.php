@@ -10,7 +10,7 @@ require('se_define_aoi.php');
 date_default_timezone_set('America/New_York');
 
 // ini_set("display_errors", 0);
-ini_set("error_log", "/var/www/html/ncgap/logs/php-error.log");
+ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
 
 //click points for navigation
 $click_x = $_POST['clickx'];
