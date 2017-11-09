@@ -1,7 +1,7 @@
 
 <?php
 //set mapfile and load mapscript if not already loaded
-$mapfile = "../segap.map";
+$mapfile = "/var/www/html/segap/segap.map";
 
 require('se_config.php');
 pg_connect($pg_connect);
