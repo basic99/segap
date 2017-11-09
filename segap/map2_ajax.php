@@ -67,7 +67,7 @@ $query = "insert into check_mapobj(job_id ) values ( $job_id );";
 pg_query($query);
 
 //create mapobj
-$mapfile = "../segap.map";
+$mapfile = "/var/www/html/segap/segap.map";
 $map = ms_newMapObj($mapfile);
 
 //check that script is still running after mapobj creation
@@ -321,7 +321,7 @@ $this_layer->set('status', MS_ON);
 //calculate extent from class variables the first time or zoom to aoi, else use previous extent
 $extent_obj =  ms_newRectObj();
 
-// function to calculate bounding box for species range 
+// function to calculate bounding box for species range
 function range_extent($code) {
 		  pg_connect("host=localhost dbname=segap_ranges user=postgres");
 		  $query = "select st_xmax(wkb_geometry) from r_{$code}";
@@ -333,7 +333,7 @@ function range_extent($code) {
 			  }
 			  $max_x = max($row["st_xmax"], $max_x);
 		  }
-		  
+
 		  $query = "select st_xmin(wkb_geometry) from r_{$code}";
 		  $result = pg_query($query);
 		  $array = pg_fetch_all($result);
@@ -343,7 +343,7 @@ function range_extent($code) {
 			  }
 			  $min_x = min($row["st_xmin"], $min_x);
 		  }
-		  
+
 		  $query = "select st_ymax(wkb_geometry) from r_{$code}";
 		  $result = pg_query($query);
 		  $array = pg_fetch_all($result);
@@ -353,7 +353,7 @@ function range_extent($code) {
 			  }
 			  $max_y= max($row["st_ymax"], $max_y);
 		  }
-		  
+
 		  $query = "select st_ymin(wkb_geometry) from r_{$code}";
 		  $result = pg_query($query);
 		  $array = pg_fetch_all($result);
@@ -363,7 +363,7 @@ function range_extent($code) {
 			  }
 			  $min_y = min($row["st_ymin"], $min_y);
 		  }
-		  
+
 		  $extent = $min_x ." ".$min_y." ".$max_x." ".$max_y;
 		  return $extent;
 }
@@ -389,7 +389,7 @@ if (($new_page  || $zoom_aoi) && ($type != 'permalink')) {
 	$miny = $mapext[1];
 	$maxx = $mapext[2];
 	$maxy = $mapext[3];
-	$extent_obj->setExtent($minx, $miny, $maxx, $maxy);	  
+	$extent_obj->setExtent($minx, $miny, $maxx, $maxy);
 }
 $map->setSize($win_w, $win_h);
 $map->zoompoint($zoom, $click_point, $win_w, $win_h, $extent_obj);
