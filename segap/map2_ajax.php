@@ -247,12 +247,15 @@ if(preg_match("/status/", $layer)){
 
 $rangemap = "r_".strtolower($sppcode);
 $data = "wkb_geometry from ".$rangemap;
+
+// table lost moving from meatacomet
+
 //set raster to display species maps
-if(preg_match("/range/", $species_layer)){
-$this_layer = $map->getLayerByName('rangemaps');
-$this_layer->set('data', $data);
-$this_layer->set('status', MS_ON);
-$this_layer->set('opacity', $range_transp);
+// if(preg_match("/range/", $species_layer)){
+// $this_layer = $map->getLayerByName('rangemaps');
+// $this_layer->set('data', $data);
+// $this_layer->set('status', MS_ON);
+// $this_layer->set('opacity', $range_transp);
 //set layers from controls
 if(preg_match("/landcover/", $layer)){
 	$this_layer = $map->getLayerByName('landcover');
