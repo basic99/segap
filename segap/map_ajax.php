@@ -7,6 +7,8 @@ pg_connect($pg_connect);
 ini_set("display_errors", 0);
 ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
 
+error_log("map ajax");
+
 $mapfile = "/var/www/html/segap/segap.map";
 
 $user_x = $_POST['user_x'];

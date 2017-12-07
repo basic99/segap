@@ -125,7 +125,6 @@ $se_aoi_class =  $_SESSION[$aoi_name];
 $aoi_area = $se_aoi_class->get_area();
 
 //create mapobj
-$mapfile = "../segap.map";
 $map = ms_newMapObj($mapfile);
 $mapname = "map".rand(0,9999999).".png";
 //$mspath = "/data/server_temp/";
