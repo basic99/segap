@@ -278,7 +278,7 @@ $this_layer->set('status', MS_OFF);
 $this_layer = $map->getLayerByName('landcover');
 $this_layer->set('status', MS_OFF);
 */
-}
+// }
 
 
 if(preg_match("/habitat|ownership|status|manage|richness/", $species_layer)){
