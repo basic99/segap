@@ -188,6 +188,7 @@ g.region -d &>/dev/null
 r.in.gdal input={$blank} output={$blank_file}a &>/dev/null
 cat /var/www/html/segap/grass/mask_recl | r.reclass input={$blank_file}a output={$blank_file} &>/dev/null
 GRASS_SCRIPT;
+error_log($grass_cmd);
 		system($grass_cmd);
       $fp = fopen("/pub/server_temp/testcmd", w);
       //fwrite($fp, $grass_cmd);
