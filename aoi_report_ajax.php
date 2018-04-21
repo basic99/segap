@@ -4,6 +4,13 @@ session_start();
 require('se_config.php');
 $sedbcon = pg_connect($pg_connect);
 
+date_default_timezone_set('America/New_York');
+
+// ini_set("display_errors", 0);
+ini_set("log_errors", 1);
+ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
+error_log("aoi_report_ajax");
+
 $aoi_name = $_POST['aoiname'];
 $a = $_SESSION[$aoi_name];
 
