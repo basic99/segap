@@ -30,6 +30,7 @@ function load_selections(){
 }
 
 function lc_report(){
+	console.log("lc_report in file controls234");
 	window.open("","report","toolbar=no,menubar=no,scrollbars,resizable");
 	parent.map.document.forms.fm2.target = 'report';
 	parent.map.document.forms.fm2.report.value = 'landcover';
@@ -80,7 +81,7 @@ function change_categories(){
 
 function functions_action(){
 	var self_loc = window.location.pathname;
-	
+
 	if(document.forms[1].mode[0].checked){
 		parent.functions.location = self_loc.replace(/controls4.php/, "single.php");
 	}
