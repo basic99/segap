@@ -24,6 +24,7 @@ $query2 = "select aoi_data from aoi where name = '$aoi_name'";
 $result = pg_query($sedbcon, $query2);
 $row = pg_fetch_array($result);
 $aoi_data = unserialize($row['aoi_data']);
+error_log($aoi_data);
 $states = explode(":", $aoi_data['state_aoi']);
 $bcr =  explode(":", $aoi_data['bcr_aoi']);
 $lcc =  explode(":", $aoi_data['lcc_aoi']);
