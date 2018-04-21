@@ -176,11 +176,13 @@ class se_aoi_class{
 
 		//copy blank file to rectangle of AOI
 		$gdal_cmd1 = "/usr/local/bin/gdal_translate -of GTiff -projwin {$min_x} {$max_y} {$max_x} {$min_y} /var/www/html/data/segap/se_blank {$blank} &>/dev/null";
+		error_log($gdal_cmd1);
 		system($gdal_cmd1);
 
 		//burn aoi into blank file
 		$gdal_cmd = "/usr/local/bin/gdal_rasterize -burn 1 -sql \"SELECT AsText(wkb_geometry) FROM  aoi  where aoi.name='{$this->aoi_name}' \"   PG:\"host=localhost port=5432 dbname=segap user=postgres\"  {$blank} &>/dev/null";
 		system($gdal_cmd);
+		error_log($gdal_cmd);
 
 		//import mask into GRASS
 		$grass_cmd=<<<GRASS_SCRIPT
