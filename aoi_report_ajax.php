@@ -194,6 +194,8 @@ if ((isset($states) || isset($bcr) || isset($lcc) || $aoi_data['ecosys_aoi'] == 
 	//echo json_encode(array("rep"=>$response));die();
 } else {
 
+	error_log("report is {$report}");
+
 
 	if ($report == 'landcover'){
 		$response =  "<h1>AOI Land Cover Report</h1>";
