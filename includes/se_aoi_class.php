@@ -2,6 +2,13 @@
 require("se_config.php");
 $sebdcon = pg_connect($pg_connect);
 
+date_default_timezone_set('America/New_York');
+
+// ini_set("display_errors", 0);
+ini_set("log_errors", 1);
+ini_set("error_log", "/var/www/html/segap/logs/php-error.log");
+error_log("aoi_report_ajax");
+
 
 //////////////////////////////////////////////////////////////////////////////////
 // this class has a constructor that takes as a parameter an AOI name
@@ -142,7 +149,7 @@ class se_aoi_class{
 					$this->mask_name = 'PENINSULAR_FLORIDA';
 					return;
 			}
-			
+
 			switch ($aoi_data['lcc_aoi']) {
 				case "1":
 					$this->mask_name = 'appalachian_lcc';
@@ -232,6 +239,7 @@ r.mapcalc {$this->mask_name}calc_lc = '{$this->mask_name}  * se_landcover' &>/de
 cat /var/www/html/segap/grass/se_lcov_recl | r.reclass input={$this->mask_name}calc_lc output={$this->mask_name}recl_lc &>/dev/null
 r.report -n map={$this->mask_name}recl_lc units=a,h,p 2>/dev/null
 GRASS_SCRIPT;
+error_log($str);
 	return `$str`;
 }
 
@@ -288,7 +296,7 @@ r.mapcalc {$this->mask_name}calc_pred = '{$this->mask_name}  *{$raster}' &>/dev/
 cat /var/www/html/segap/grass/se_pred_recl | r.reclass input={$this->mask_name}calc_pred output={$this->mask_name}recl_pred
 r.report -n map={$this->mask_name}recl_pred units=a,h,p | tee /data/server_temp{$report_name}
 GRASS_SCRIPT;
-	
+
 	$rep = `$str`;
 	return $rep;
 }
@@ -308,7 +316,7 @@ GRASS_SCRIPT;
 
    $rep = `$str`;
 	return $rep;
-	
+
 }
 
 public function species_ownership($a){
@@ -389,7 +397,7 @@ g.region n={$max_y} s={$min_y} w={$min_x} e={$max_x}
 r.mapcalc {$map} = 'if({$raster}) *  se_landcover_recl' &>/dev/null
 cat  /var/www/html/segap/grass/se_lcov_color | r.colors map={$map} color=rules &>/dev/null
 GRASS_SCRIPT;
-		  
+
 	system($str);
 	return $map;
 }
