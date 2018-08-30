@@ -5,7 +5,7 @@ pg_connect($pg_connect);
 set_time_limit(300);
 
 //set mapfile and load mapscript if not already loaded
-$mapfile = "segap.map";
+$mapfile = "/var/www/html/segap/segap.map";
 
 //var_dump($_POST);
 

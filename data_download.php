@@ -148,7 +148,7 @@ $aoi_extent->setextent($min_x, $min_y, $max_x, $max_y);
 $extent_save = $min_x.":".$min_y.":".$max_x.":".$max_y;
 
 
-$mapfile = "segap.map";
+$mapfile = "/var/www/html/segap/segap.map";
 
 // draw elevation and states layers
 $map = ms_newMapObj($mapfile);
